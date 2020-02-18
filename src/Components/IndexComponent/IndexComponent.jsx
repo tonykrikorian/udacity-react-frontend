@@ -3,7 +3,14 @@ import TextField from "../TextField/TextField";
 import AddItemButton from "../AddItemButton/AddItemButton";
 
 class IndexComponent extends Component {
-  state = {};
+  state = {
+    text: ""
+  };
+
+  handleTextChange = e => {
+    const text = e.target.value;
+    this.setState({ text });
+  };
   render() {
     const textFields = {
       smallText: "Debe escribir el item que desea ingresar",
@@ -14,7 +21,7 @@ class IndexComponent extends Component {
       <>
         <div className="row">
           <div className="col-md-6">
-            <TextField {...textFields} />
+            <TextField {...textFields} onChange={this.handleTextChange} />
           </div>
         </div>
         <div className="row">
