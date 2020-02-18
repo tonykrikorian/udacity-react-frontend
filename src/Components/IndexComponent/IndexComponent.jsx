@@ -1,15 +1,55 @@
 import React, { Component } from "react";
 import TextField from "../TextField/TextField";
 import AddItemButton from "../AddItemButton/AddItemButton";
+import TableComponent from "../TableComponent/TableComponent";
+import axios from "axios";
 
 class IndexComponent extends Component {
   state = {
-    text: ""
+    text: "",
+    items: []
+  };
+
+  componentDidMount = async () => {
+    const items = await this.getItemBackend();
+
+    this.setState({ items });
   };
 
   handleTextChange = e => {
     const text = e.target.value;
     this.setState({ text });
+  };
+
+  handleOnClick = async () => {
+    const items = [...this.state.items];
+    const data = await this.addItemBackend();
+    items.push(data);
+    this.setState({ items });
+  };
+
+  addItemBackend = async () => {
+    const { data } = await axios.post(
+      "https://localhost:44321/api/Items/addItem",
+      {
+        ItemName: this.state.text
+      }
+    );
+    return data;
+  };
+
+  getItemBackend = async () => {
+    const { data } = await axios.get(
+      "https://localhost:44321/api/Items/getItems",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        }
+      }
+    );
+
+    return data;
   };
   render() {
     const textFields = {
@@ -26,7 +66,13 @@ class IndexComponent extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <AddItemButton {...textFields} />
+            <AddItemButton {...textFields} onClick={this.handleOnClick} />
+          </div>
+        </div>
+        <br />
+        <div className="row">
+          <div className="col">
+            <TableComponent items={this.state.items} />
           </div>
         </div>
       </>
