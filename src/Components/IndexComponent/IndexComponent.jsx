@@ -66,7 +66,11 @@ class IndexComponent extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <AddItemButton {...textFields} onClick={this.handleOnClick} />
+            <AddItemButton
+              {...textFields}
+              onClick={this.handleOnClick}
+              isEmpty={this.state.text}
+            />
           </div>
         </div>
         <br />
