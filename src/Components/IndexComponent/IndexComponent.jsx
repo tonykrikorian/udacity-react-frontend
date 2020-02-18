@@ -12,7 +12,6 @@ class IndexComponent extends Component {
 
   componentDidMount = async () => {
     const items = await this.getItemBackend();
-
     this.setState({ items });
   };
 
@@ -25,6 +24,12 @@ class IndexComponent extends Component {
     const items = [...this.state.items];
     const data = await this.addItemBackend();
     items.push(data);
+    this.setState({ items });
+  };
+
+  handleChangeDelete = id => {
+    const itemsOriginal = [...this.state.items];
+    const items = itemsOriginal.filter(x => x.id !== id);
     this.setState({ items });
   };
 
@@ -51,6 +56,8 @@ class IndexComponent extends Component {
 
     return data;
   };
+
+  deleteItemBackend = () => {};
   render() {
     const textFields = {
       smallText: "Debe escribir el item que desea ingresar",
@@ -76,7 +83,10 @@ class IndexComponent extends Component {
         <br />
         <div className="row">
           <div className="col">
-            <TableComponent items={this.state.items} />
+            <TableComponent
+              items={this.state.items}
+              handleOnDelete={this.handleChangeDelete}
+            />
           </div>
         </div>
       </>
